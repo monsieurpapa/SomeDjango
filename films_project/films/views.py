@@ -1,5 +1,6 @@
 
-from django.shortcuts import render
+from django.shortcuts import render,redirect
+from django.urls import reverse
 from .models import Film
 
 
@@ -46,3 +47,25 @@ def user_info(request):
                       context)
     # elif request.method == 'POST':
     #     return HttpResponse('POST request here.')
+
+
+    def user_form(request):
+        if request.method == 'GET':
+            context = {'title': 'User Form Page'}
+            template = 'films/user_form.html'
+
+            return render(request,
+                        template,
+                        context)
+            
+        elif request.method == 'POST':
+            # it is good practice to send the data from a POST request to a different URL than the one where the form is located
+            #save the data passed in the form  for every input field
+            username = request.POST.get('username')
+            country = request.POST.get('country')
+            '''Then we can pass these values to another dictionary located in request.session, which is extremely helpful. It allows data to be stored in 
+            the current browser session and be retrieved in different moments by our code'''
+            request.session['username'] = username
+            request.session['country'] = country
+
+            return redirect(reverse('films:user_info'))
