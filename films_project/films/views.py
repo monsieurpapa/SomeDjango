@@ -69,3 +69,10 @@ def user_info(request):
             request.session['country'] = country
 
             return redirect(reverse('films:user_info'))
+    
+    def details(request, id):
+        film = Film.objects.get(id=id)
+        # other query option:
+        # film = Film.objects.filter(id=id)[0] #can also be used to query for just a single element by id
+        context = {'film': film}
+        return render(request, 'films/details.html', context)
